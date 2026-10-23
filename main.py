@@ -31,8 +31,8 @@ PUMPKIN_COLOR   = (255, 140, 0)      # Dark Orange
 
 
 # --- GAME DATA & STATES ---
-states = ["Graveyard", "Haunted House", "Forest", "Pumpkin Patch"]
-
+states = ["Graveyard + 10", "Haunted House + 5", "Forest + 8", "Pumpkin Patch + 20"]
+rewards = [10, 5, 8, 20]
 
 # Step 2 — Transition Matrix
 transition_matrix = [
@@ -96,8 +96,21 @@ while running:
                 # --- AI CHALLENGE LOGIC ---
                 # AI looks at the current row and picks the highest probability index
                 row = transition_matrix[current_state]
-                ai_prediction = row.index(max(row))
-               
+                ai_probability = row.index(max(row))
+
+                # AI also gets expected value
+                expected = []
+                for i in range(4):
+                    value = transition_matrix[current_state][i] * rewards[i]
+                    expected.append(value)
+                ai_best_action = expected.index(max(expected))
+
+                # AI uses random choice
+                ai_random = random.randint(0, 3)
+
+                # AI choice
+                ai_prediction = ai_probability  # This can be changed
+
                 # Step 5 — Generate the monster's next location
                 next_state = random.choices(range(4), weights=row, k=1)[0]
                
